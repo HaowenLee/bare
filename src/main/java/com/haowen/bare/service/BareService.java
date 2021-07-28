@@ -16,6 +16,8 @@ public class BareService {
     private KuaiShouService kuaiShouService;
     @Resource
     private WeShiService weShiService;
+    @Resource
+    private PiPiXiaService piPiXiaService;
 
     public BareResResult parse(String text) throws IOException {
         if (text.contains("v.douyin.com")) {
@@ -24,6 +26,8 @@ public class BareService {
             return kuaiShouService.parseUrl(StringUtil.filterUrl(text));
         } else if (text.contains("isee.weishi.qq.com")) {
             return weShiService.parseUrl(text);
+        } else if (text.contains("h5.pipix.com")) {
+            return piPiXiaService.parseUrl(text);
         } else {
             throw new IllegalArgumentException("暂不支持的平台");
         }
