@@ -1,4 +1,4 @@
-package com.haowen.bare.result;
+package com.haowen.bare.vo;
 
 import lombok.Data;
 
