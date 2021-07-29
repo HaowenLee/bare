@@ -1,5 +1,7 @@
 package com.haowen.bare.parse.parser;
 
+import cn.hutool.json.JSONObject;
+import cn.hutool.json.JSONUtil;
 import com.haowen.bare.parse.BareParser;
 import com.haowen.bare.result.BareResResult;
 import com.haowen.bare.utils.UserAgentUtil;
@@ -27,34 +29,34 @@ public class ZuiYouParser implements BareParser {
      */
     @Override
     public BareResResult parse(String url) throws IOException {
-        String htmlStr = Jsoup
+        Document document = Jsoup
                 .connect(url)
                 .header("User-Agent", UserAgentUtil.getOne())
-                .get()
-                .body()
-                .html();
+                .get();
 
-        String filter = filter(htmlStr);
+        Element element = document.getElementById("appState");
+
+        String filter = element.html()
+                .replace("window.APP_INITIAL_STATE=", "")
+                .replace("new Date(", "")
+                .replace(")", "");
+
+        JSONObject jsonObject = JSONUtil.parseObj(filter)
+                .getJSONObject("sharePost")
+                .getJSONObject("postDetail")
+                .getJSONObject("post")
+                .getJSONObject("videos");
+
+        String thumb = "";
+        for (String key : jsonObject.keySet()) {
+            thumb = key;
+        }
+        String videoUrl = (String) jsonObject.getJSONObject(thumb)
+                .getObj("url");
 
         List<String> urlList = new ArrayList<>();
-        urlList.add("");
+        urlList.add(videoUrl);
 
         return new BareResResult(urlList);
-    }
-
-    /**
-     * 方法描述: 过滤分享链接的中文汉字
-     *
-     * @param url 分享链接
-     */
-    public static String filter(String url) {
-        // 匹配网址
-        String regex = "loadTimeData.data = \\{\"([\\s\\S]*?)\"\\}";
-        Pattern p = Pattern.compile("loadTimeData");
-        Matcher m = p.matcher(url);
-        if (m.find()) {
-            return url.substring(m.start(), m.end());
-        }
-        return "";
     }
 }
