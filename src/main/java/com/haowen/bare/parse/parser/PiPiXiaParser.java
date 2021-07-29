@@ -1,27 +1,28 @@
-package com.haowen.bare.service;
+package com.haowen.bare.parse.parser;
 
 import cn.hutool.core.lang.Assert;
 import cn.hutool.json.JSONUtil;
+import com.haowen.bare.parse.BareParser;
 import com.haowen.bare.result.BareResResult;
-import com.haowen.bare.vo.DouyinResult;
 import com.haowen.bare.vo.PiPiXiaResult;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-@Service
-public class PiPiXiaService {
+@Component
+public class PiPiXiaParser implements BareParser {
 
     private static final String API = "https://h5.pipix.com/bds/webapi/item/detail/?item_id=";
 
     /**
      * 方法描述:短视频解析
      */
-    public BareResResult parseUrl(String url) throws IOException {
+    @Override
+    public BareResResult parse(String url) throws IOException {
         Assert.isTrue(url.contains("h5.pipix.com"));
         return parseVideo(url);
     }

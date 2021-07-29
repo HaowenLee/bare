@@ -1,12 +1,13 @@
-package com.haowen.bare.service;
+package com.haowen.bare.parse.parser;
 
 import cn.hutool.core.lang.Assert;
 import cn.hutool.http.HttpUtil;
 import cn.hutool.json.JSONUtil;
+import com.haowen.bare.parse.BareParser;
 import com.haowen.bare.result.BareResResult;
 import com.haowen.bare.utils.StringUtil;
 import com.haowen.bare.vo.WeShiResult;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -14,15 +15,16 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@Service
-public class WeShiService {
+@Component
+public class WeiShiParser implements BareParser {
 
     private static final String API = "https://h5.weishi.qq.com/webapp/json/weishi/WSH5GetPlayPage?t=0.1053529481813007&g_tk=";
 
     /**
      * 方法描述:短视频解析
      */
-    public BareResResult parseUrl(String url) throws IOException {
+    @Override
+    public BareResResult parse(String url) throws IOException {
         Assert.isTrue(url.contains("isee.weishi.qq.com"));
         return parseVideo(url);
     }

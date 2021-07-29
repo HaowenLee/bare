@@ -1,33 +1,31 @@
-package com.haowen.bare.service;
+package com.haowen.bare.parse.parser;
 
-import cn.hutool.core.lang.Assert;
 import cn.hutool.json.JSONUtil;
+import com.haowen.bare.parse.BareParser;
 import com.haowen.bare.result.BareResResult;
 import com.haowen.bare.vo.DouyinResult;
-import lombok.extern.slf4j.Slf4j;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * 短视频解析
- */
-@Slf4j
-@Service
-public class DouyinService {
+@Component
+public class DouYinParser implements BareParser {
 
     private static final String API = "https://www.iesdouyin.com/web/api/v2/aweme/iteminfo/?item_ids=";
 
     /**
-     * 方法描述:短视频解析
+     * 获取无水印资源信息
+     *
+     * @param link 复制的链接
+     * @return 无水印资源信息
      */
-    public BareResResult parseUrl(String url) throws IOException {
-        Assert.isTrue(url.contains("v.douyin.com"));
-        return parseVideo(url);
+    @Override
+    public BareResResult parse(String link) {
+        return null;
     }
 
     /**
@@ -72,4 +70,3 @@ public class DouyinService {
         return url.substring(start, end);
     }
 }
-

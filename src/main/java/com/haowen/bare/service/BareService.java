@@ -1,5 +1,8 @@
 package com.haowen.bare.service;
 
+
+import com.haowen.bare.parse.BareParser;
+import com.haowen.bare.parse.ParserFactory;
 import com.haowen.bare.result.BareResResult;
 import com.haowen.bare.utils.StringUtil;
 import org.springframework.stereotype.Service;
@@ -11,25 +14,10 @@ import java.io.IOException;
 public class BareService {
 
     @Resource
-    private DouyinService douyinService;
-    @Resource
-    private KuaiShouService kuaiShouService;
-    @Resource
-    private WeShiService weShiService;
-    @Resource
-    private PiPiXiaService piPiXiaService;
+    private ParserFactory parserFactory;
 
-    public BareResResult parse(String text) throws IOException {
-        if (text.contains("v.douyin.com")) {
-            return douyinService.parseUrl(StringUtil.filterUrl(text));
-        } else if (text.contains("v.kuaishou.com")) {
-            return kuaiShouService.parseUrl(StringUtil.filterUrl(text));
-        } else if (text.contains("isee.weishi.qq.com")) {
-            return weShiService.parseUrl(text);
-        } else if (text.contains("h5.pipix.com")) {
-            return piPiXiaService.parseUrl(text);
-        } else {
-            throw new IllegalArgumentException("暂不支持的平台");
-        }
+    public BareResResult parse(String link) throws IOException {
+        BareParser parser = parserFactory.getParser(link);
+        return parser.parse(StringUtil.filterUrl(link));
     }
 }
