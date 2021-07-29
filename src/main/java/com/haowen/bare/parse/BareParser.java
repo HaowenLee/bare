@@ -5,12 +5,7 @@ import com.haowen.bare.result.BareResResult;
 import java.io.IOException;
 
 /**
- * ================================================
- * 作    者：Herve、Li
- * 创建日期：2021/3/15
- * 描    述：
- * 修订历史：
- * ================================================
+ * 解析器接口
  */
 public interface BareParser {
 

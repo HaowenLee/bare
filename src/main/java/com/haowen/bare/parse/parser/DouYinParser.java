@@ -1,10 +1,13 @@
 package com.haowen.bare.parse.parser;
 
+import cn.hutool.json.JSONArray;
+import cn.hutool.json.JSONNull;
+import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
 import com.haowen.bare.parse.BareParser;
 import com.haowen.bare.result.BareResResult;
-import com.haowen.bare.vo.DouyinResult;
-import org.jsoup.Connection;
+import com.haowen.bare.utils.UrlUtil;
+import com.haowen.bare.utils.UserAgentUtil;
 import org.jsoup.Jsoup;
 import org.springframework.stereotype.Component;
 
@@ -12,48 +15,45 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * 抖音解析器
+ */
 @Component
 public class DouYinParser implements BareParser {
 
+    /**
+     * 获取视频接口地址
+     */
     private static final String API = "https://www.iesdouyin.com/web/api/v2/aweme/iteminfo/?item_ids=";
 
     /**
-     * 获取无水印资源信息
+     * 方法描述: 获取无水印资源信息
      *
-     * @param link 复制的链接
+     * @param url 复制的链接
      * @return 无水印资源信息
      */
     @Override
-    public BareResResult parse(String link) {
-        return null;
-    }
+    public BareResResult parse(String url) throws IOException {
 
-    /**
-     * 方法描述: 抖音解析下载视频
-     *
-     * @param url 分享链接地址
-     */
-    private BareResResult parseVideo(String url) throws IOException {
-        // 短链接获取重定向真实地址
-        Connection con = Jsoup.connect(url);
-        con.header("User-Agent", "Mozilla/5.0 (iPhone; CPU iPhone OS 12_1_4 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/16D57 Version/12.0 Safari/604.1");
-        Connection.Response resp = con.method(Connection.Method.GET).execute();
-
+        String userAgent = UserAgentUtil.getOne();
         // 获取分享资源信息
-        String videoUrl = API + getItemId(resp.url().toString());
-        String jsonStr = Jsoup.connect(videoUrl).ignoreContentType(true).execute().body();
+        String jsonStr = Jsoup
+                .connect(API + getItemId(UrlUtil.getRealUrl(userAgent, url)))
+                .header("User-Agent", userAgent)
+                .ignoreContentType(true)
+                .execute()
+                .body();
 
-        DouyinResult douyinResult = JSONUtil.toBean(jsonStr, DouyinResult.class);
-
-        List<DouyinResult.Item_listEntity.ImagesEntity> images = douyinResult.getItem_list().get(0).getImages();
+        // 解析无水印资源
+        JSONObject itemFirst = JSONUtil.parseObj(jsonStr).getJSONArray("item_list").getJSONObject(0);
         List<String> urlList = new ArrayList<>();
-        // 判断是图片还是视频
-        if (images == null) {
-            urlList.add(douyinResult.getItem_list().get(0).getVideo().getPlay_addr().getUrl_list().get(0).replace("playwm", "play"));
-        } else {
-            for (DouyinResult.Item_listEntity.ImagesEntity item : images) {
-                urlList.add(item.getUrl_list().get(0));
+        if (!JSONNull.NULL.equals(itemFirst.get("images"))) {
+            JSONArray imageJSONArray = itemFirst.getJSONArray("images");
+            for (int i = 0; i < imageJSONArray.size(); i++) {
+                urlList.add((String) imageJSONArray.getJSONObject(i).getJSONArray("url_list").get(0));
             }
+        } else {
+            urlList.add(((String) itemFirst.getJSONObject("video").getJSONObject("play_addr").getJSONArray("url_list").get(0)).replace("playwm", "play"));
         }
 
         return new BareResResult(urlList);
@@ -65,7 +65,7 @@ public class DouYinParser implements BareParser {
      * @param url 分享链接
      */
     public String getItemId(String url) {
-        int start = url.indexOf("/video/") + 7;
+        int start = url.indexOf("/video/") + "/video/".length();
         int end = url.lastIndexOf("/");
         return url.substring(start, end);
     }

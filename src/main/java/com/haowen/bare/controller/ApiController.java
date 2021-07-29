@@ -23,10 +23,10 @@ public class ApiController {
     /**
      * 获取无水印资源地址列表
      *
-     * @param text 复制的链接
+     * @param link 复制的链接
      */
     @RequestMapping("/bare")
-    private ReturnObject<BareResResult> bare(@RequestParam("text") String text) throws IOException {
-        return ResponseUtil.ok(bareService.parse(text));
+    private ReturnObject<BareResResult> bare(@RequestParam("link") String link) throws IOException {
+        return ResponseUtil.ok(bareService.parse(link));
     }
 }

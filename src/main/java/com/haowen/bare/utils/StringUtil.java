@@ -18,7 +18,7 @@ public class StringUtil {
      */
     public static String filterUrl(String url) {
         // 匹配网址
-        String regex = "https?://(\\w|-)+(\\.(\\w|-)+)+(/(\\w+(\\?(\\w+=(\\w|%|-)*(\\&\\w+=(\\w|%|-)*)*)?)?)?)+";
+        String regex = "https?://(\\w|-)+(\\.(\\w|-)+)+(/((\\w|-|.)+(\\?(\\w+=(\\w|%|-)*(\\&\\w+=(\\w|%|-)*)*)?)?)?)+";
         Pattern p = Pattern.compile(regex);
         Matcher m = p.matcher(url);
         if (m.find()) {

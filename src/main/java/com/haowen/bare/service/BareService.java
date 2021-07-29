@@ -16,6 +16,11 @@ public class BareService {
     @Resource
     private ParserFactory parserFactory;
 
+    /**
+     * 获取无水印资源地址列表
+     *
+     * @param link 复制的链接
+     */
     public BareResResult parse(String link) throws IOException {
         BareParser parser = parserFactory.getParser(link);
         return parser.parse(StringUtil.filterUrl(link));

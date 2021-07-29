@@ -1,46 +1,50 @@
 package com.haowen.bare.parse.parser;
 
-import cn.hutool.core.lang.Assert;
 import cn.hutool.http.HttpUtil;
 import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
 import com.haowen.bare.parse.BareParser;
 import com.haowen.bare.result.BareResResult;
 import com.haowen.bare.utils.StringUtil;
+import com.haowen.bare.utils.UserAgentUtil;
 import org.springframework.stereotype.Component;
 
-import java.io.IOException;
 import java.util.*;
 
+/**
+ * 皮皮搞笑解析器
+ */
 @Component
 public class PiPiGaoXiaoParser implements BareParser {
 
+    /**
+     * 获取视频接口地址
+     */
     private static final String API = "https://h5.pipigx.com/ppapi/share/fetch_content";
 
     /**
      * 方法描述:短视频解析
+     *
+     * @param url 链接地址
      */
     @Override
-    public BareResResult parse(String url) throws IOException {
-        Assert.isTrue(url.contains("h5.pipigx.com"));
-        return parseVideo(url);
-    }
+    public BareResResult parse(String url) {
 
-
-    /**
-     * 方法描述: 抖音解析下载视频
-     *
-     * @param url 分享链接地址
-     */
-    private BareResResult parseVideo(String url) throws IOException {
+        // 获取URL参数
         Map<String, List<String>> queryParams = StringUtil.getQueryParams(url);
 
         Map<String, Object> map = new HashMap<>();
         map.put("mid", Long.parseLong(queryParams.get("mid").get(0)));
         map.put("pid", Long.parseLong(queryParams.get("pid").get(0)));
         map.put("type", "post");
-        String post = HttpUtil.post(API, JSONUtil.toJsonStr(map));
-        JSONObject jsonObject = JSONUtil.parseObj(post).getJSONObject("data").getJSONObject("post").getJSONObject("videos");
+
+        // 获取分享资源信息
+        String jsonStr = HttpUtil.createPost(API)
+                .header("User-Agent", UserAgentUtil.getOne())
+                .body(JSONUtil.toJsonStr(map))
+                .execute()
+                .body();
+        JSONObject jsonObject = JSONUtil.parseObj(jsonStr).getJSONObject("data").getJSONObject("post").getJSONObject("videos");
         Set<String> set = jsonObject.keySet();
         String thumb = null;
         for (String item : set) {

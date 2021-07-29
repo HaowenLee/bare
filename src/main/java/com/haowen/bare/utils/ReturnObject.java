@@ -20,7 +20,7 @@ public class ReturnObject<T> implements Serializable {
     /**
      * 返回对象
      */
-    private T ro;
+    private T data;
 
     /**
      * 错误代码对应的信息
@@ -32,22 +32,22 @@ public class ReturnObject<T> implements Serializable {
 
     /**
      * @param errorCode 统一错误代码对象
-     * @param ro        返回对象
+     * @param data      返回对象
      */
-    public ReturnObject(ErrorCode errorCode, T ro) {
+    public ReturnObject(ErrorCode errorCode, T data) {
         this.code = errorCode.value();
-        this.ro = ro;
+        this.data = data;
         this.msg = errorCode.msg();
     }
 
     /**
      * @param code 统一错误代码
-     * @param ro   返回对象
+     * @param data 返回对象
      * @param msg  错误代码对应的信息
      */
-    public ReturnObject(int code, T ro, String msg) {
+    public ReturnObject(int code, T data, String msg) {
         this.code = code;
-        this.ro = ro;
+        this.data = data;
         this.msg = msg;
     }
 }
