@@ -28,13 +28,14 @@ public enum ErrorCode {
     /**
      * 业务错误
      */
-    PARAM_ERROR(2000000, "参数错误"),
-    AUTH_ERROR(2010000, "认证错误"),
-    PRIORITY_ERROR(2020000, "权限错误"),
-    VERSION_ERROR(2030000, "版本错误"),
-    SCHEDULE_ERROR(2040000, "调度器使用错误"),
-    GOODS_ERROR(2050000, "商品相关错误"),
-    SIGNATURE_ERROR(2060000, "签名错误"),
+    BIZ_ERROR(2000000, "业务错误"),
+    PARAM_ERROR(BIZ_ERROR.value + 1, "参数错误"),
+    AUTH_ERROR(BIZ_ERROR.value + 2, "认证错误"),
+    PRIORITY_ERROR(BIZ_ERROR.value + 3, "权限错误"),
+    VERSION_ERROR(BIZ_ERROR.value + 4, "版本错误"),
+    SCHEDULE_ERROR(BIZ_ERROR.value + 5, "调度器使用错误"),
+    SIGNATURE_ERROR(BIZ_ERROR.value + 6, "签名错误"),
+    NOT_SUPPORTED_PLATFORM_ERROR(BIZ_ERROR.value + 7, "不支持的平台"),
 
     /**
      * 数据库错误

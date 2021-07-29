@@ -4,16 +4,22 @@ import com.haowen.bare.result.BareResResult;
 import com.haowen.bare.service.BareService;
 import com.haowen.bare.utils.ResponseUtil;
 import com.haowen.bare.utils.ReturnObject;
-import org.springframework.web.bind.annotation.RequestMapping;
+import com.sun.istack.internal.NotNull;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
+import javax.validation.constraints.NotBlank;
 import java.io.IOException;
 
 /**
  * 外部接口
  */
+@Api(tags = "对外接口")
 @RestController
 public class ApiController {
 
@@ -25,8 +31,12 @@ public class ApiController {
      *
      * @param link 复制的链接
      */
-    @RequestMapping("/bare")
-    private ReturnObject<BareResResult> bare(@RequestParam("link") String link) throws IOException {
+    @ApiOperation(value = "通用解析", response = BareResResult.class)
+    @PostMapping("/bare")
+    private ReturnObject<BareResResult> bare(
+            @NotBlank(message = "请输入复制链接")
+            @ApiParam("复制的链接")
+            @RequestParam("link") String link) throws IOException {
         return ResponseUtil.ok(bareService.parse(link));
     }
 }
