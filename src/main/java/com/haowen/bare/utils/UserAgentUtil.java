@@ -14,8 +14,18 @@ public class UserAgentUtil {
             "UCWEB7.0.2.37/28/999"
     };
 
+    public static final String[] PC_USER_AGENT_ARRAY = new String[]{
+            "Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.36",
+            "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2227.1 Safari/537.36"
+    };
+
     public static String getOne() {
         int random = RandomUtil.randomInt(0, USER_AGENT_ARRAY.length - 1);
         return USER_AGENT_ARRAY[random];
+    }
+
+    public static String getPC() {
+        int random = RandomUtil.randomInt(0, PC_USER_AGENT_ARRAY.length - 1);
+        return PC_USER_AGENT_ARRAY[random];
     }
 }
