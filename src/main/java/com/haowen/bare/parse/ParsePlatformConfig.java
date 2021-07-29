@@ -13,6 +13,7 @@ class ParsePlatformConfig {
             Platform.KUAI_SHOU,
             Platform.WEI_SHI,
             Platform.PI_PI_XIA,
-            Platform.PI_PI_GAO_XIAO
+            Platform.PI_PI_GAO_XIAO,
+            Platform.HUO_SHAN
     };
 }

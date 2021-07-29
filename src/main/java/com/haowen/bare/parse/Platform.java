@@ -11,7 +11,8 @@ public enum Platform {
     KUAI_SHOU("快手", "v.kuaishou.com", KuaiShouParser.class),
     WEI_SHI("微视", "isee.weishi.qq.com", WeiShiParser.class),
     PI_PI_XIA("皮皮虾", "h5.pipix.com", PiPiXiaParser.class),
-    PI_PI_GAO_XIAO("皮皮搞笑", "h5.pipigx.com", PiPiGaoXiaoParser.class);
+    PI_PI_GAO_XIAO("皮皮搞笑", "h5.pipigx.com", PiPiGaoXiaoParser.class),
+    HUO_SHAN("抖音火山版", "share.huoshan.com", HuoShanParser.class);
 
     private final String name;
     private final String domain;
