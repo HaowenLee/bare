@@ -27,6 +27,7 @@ class ParsePlatformConfig {
             Platform.VUE_VLOG,
             Platform.BEFORE,
             Platform.QUAN_MING_K_GE,
-            Platform.DU_XIAO_SHI
+            Platform.DU_XIAO_SHI,
+//            Platform.MIAO_PAI
     };
 }
