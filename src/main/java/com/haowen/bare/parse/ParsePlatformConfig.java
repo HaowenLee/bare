@@ -19,6 +19,9 @@ class ParsePlatformConfig {
             Platform.XI_GUA,
             Platform.QING_SHI_PING,
             Platform.XIN_PIAN_CHANGE,
-            Platform.WEI_BO
+            Platform.WEI_BO,
+            Platform.AC_FUN,
+            Platform.LI_SHI_PIN,
+            Platform.DOU_PAI
     };
 }
