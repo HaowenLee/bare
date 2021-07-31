@@ -22,6 +22,11 @@ class ParsePlatformConfig {
             Platform.WEI_BO,
             Platform.AC_FUN,
             Platform.LI_SHI_PIN,
-            Platform.DOU_PAI
+            Platform.DOU_PAI,
+            Platform.MEI_PAI,
+            Platform.VUE_VLOG,
+            Platform.BEFORE,
+            Platform.QUAN_MING_K_GE,
+            Platform.DU_XIAO_SHI
     };
 }

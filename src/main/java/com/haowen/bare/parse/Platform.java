@@ -20,7 +20,12 @@ public enum Platform {
     WEI_BO("微博", "video.weibo.com", WeiBoParser.class),
     AC_FUN("AcFun", "m.acfun.cn", AcFunParser.class),
     LI_SHI_PIN("梨视频", "www.pearvideo.com", LiShiPinParser.class),
-    DOU_PAI("逗拍", "p.doupai.cc", DouPaiParser.class);
+    DOU_PAI("逗拍", "p.doupai.cc", DouPaiParser.class),
+    MEI_PAI("美拍", "www.meipai.com", MeiPaiParser.class),
+    VUE_VLOG("VUE Vlog", "v.vuevideo.net", VueVlogParser.class),
+    BEFORE("Before 避风", "m.hanyuhl.com", BeforeParser.class),
+    QUAN_MING_K_GE("全民K歌", "kg3.qq.com", QuanMingKGeParser.class),
+    DU_XIAO_SHI("度小视", "xspshare.baidu.com", DuXiaoShiParser.class);
 
     private final String name;
     private final String domain;
