@@ -1,7 +1,9 @@
 package com.haowen.bare.parse.parser;
 
+import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
 import com.haowen.bare.parse.BareParser;
+import com.haowen.bare.parse.enums.MediaType;
 import com.haowen.bare.result.BareResult;
 import com.haowen.bare.utils.UserAgentUtil;
 import org.jsoup.Jsoup;
@@ -15,6 +17,15 @@ import java.util.regex.Pattern;
 
 /**
  * 全民K歌解析器
+ * ==============================================================
+ * User-Agent Mobile
+ * 1. 获取html内容
+ * 2. 解析获取想要的结果
+ * --------------------------------------------------------------
+ * 标题 -> detail -> content
+ * 封面 -> detail -> cover
+ * 视频 -> detail => (playurl_video, null, null, null)
+ * ==============================================================
  */
 @Component
 public class QuanMingKGeParser implements BareParser {
@@ -24,6 +35,11 @@ public class QuanMingKGeParser implements BareParser {
      */
     @Override
     public BareResult parse(String url) throws IOException {
+
+        // 构建结果
+        BareResult result = new BareResult(MediaType.VIDEO);
+        List<BareResult.Video> videos = new ArrayList<>();
+        result.setVideos(videos);
 
         // 获取分享资源信息
         String html = Jsoup
@@ -37,15 +53,21 @@ public class QuanMingKGeParser implements BareParser {
                 .replace("window.__DATA__ = ", "")
                 .replace(";", "");
 
-        String videoUrl = (String) JSONUtil.parseObj(jsonStr)
-                .getJSONObject("detail")
-                .getObj("playurl_video");
+        JSONObject detailObject = JSONUtil.parseObj(jsonStr)
+                .getJSONObject("detail");
 
-        List<String> list = new ArrayList<>();
-        list.add(videoUrl);
+        // 标题、封面
+        result.setTitle(detailObject.getStr("content"))
+                .setCover(new BareResult.Image(detailObject.getStr("cover")));
 
-//        return new BareResult(list);
-        return null;
+        videos.add(new BareResult.Video(
+                detailObject.getStr("playurl_video"),
+                null,
+                null,
+                null
+        ));
+
+        return result;
     }
 
     /**

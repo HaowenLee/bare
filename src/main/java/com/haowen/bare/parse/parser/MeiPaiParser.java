@@ -4,6 +4,7 @@ import cn.hutool.core.codec.Base64;
 import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
 import com.haowen.bare.parse.BareParser;
+import com.haowen.bare.parse.enums.MediaType;
 import com.haowen.bare.result.BareResult;
 import com.haowen.bare.utils.UserAgentUtil;
 import org.jsoup.Jsoup;
@@ -31,6 +32,11 @@ public class MeiPaiParser implements BareParser {
     @Override
     public BareResult parse(String url) throws IOException {
 
+        // 构建结果
+        BareResult result = new BareResult(MediaType.VIDEO);
+        List<BareResult.Video> videos = new ArrayList<>();
+        result.setVideos(videos);
+
         // 获取分享资源信息
         Document document = Jsoup
                 .connect(url)
@@ -42,27 +48,24 @@ public class MeiPaiParser implements BareParser {
                 .replace("window._SSR_HYDRATED_DATA=", "")
                 .replace("undefined", "null");
 
-        JSONObject result = JSONUtil.parseObj(jsonStr)
+        JSONObject videoObject = JSONUtil.parseObj(jsonStr)
                 .getJSONObject("anyVideo")
                 .getJSONObject("gidInformation")
                 .getJSONObject("packerData")
                 .getJSONObject("video");
 
-        String video = (String) result.getJSONObject("videoResource")
+        String videoUrl = videoObject.getJSONObject("videoResource")
                 .getJSONObject("dash")
                 .getJSONObject("dynamic_video")
                 .getJSONArray("dynamic_video_list")
                 .getJSONObject(2)
-                .getObj("main_url");
+                .getStr("main_url");
 
-        video = Base64.decodeStr(video);
+        videoUrl = Base64.decodeStr(videoUrl);
 
+        videos.add(new BareResult.Video(videoUrl));
 
-        List<String> list = new ArrayList<>();
-        list.add(video);
-
-//        return new BareResult(list);
-        return null;
+        return result;
     }
 
     /**

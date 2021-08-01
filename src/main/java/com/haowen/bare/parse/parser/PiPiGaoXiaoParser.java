@@ -4,6 +4,7 @@ import cn.hutool.http.HttpUtil;
 import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
 import com.haowen.bare.parse.BareParser;
+import com.haowen.bare.parse.enums.MediaType;
 import com.haowen.bare.result.BareResult;
 import com.haowen.bare.utils.StringUtil;
 import com.haowen.bare.utils.UserAgentUtil;
@@ -13,6 +14,16 @@ import java.util.*;
 
 /**
  * 皮皮搞笑解析器
+ * ==============================================================
+ * User-Agent Mobile
+ * 1. 获取分享链接ID（参数形式）
+ * 2. 请求接口获取数据json
+ * 5. 解析获取想要的结果
+ * --------------------------------------------------------------
+ * 标题 -> data -> post -> content
+ * 封面 -> data -> post -> imgs[0] -> id => ('https://file.ippzone.com/img/view/id/' + id, null, null)
+ * 视频 -> data -> post -> videos -> thumb(Var) => (url, null, null, null)
+ * ==============================================================
  */
 @Component
 public class PiPiGaoXiaoParser implements BareParser {
@@ -30,6 +41,11 @@ public class PiPiGaoXiaoParser implements BareParser {
     @Override
     public BareResult parse(String url) {
 
+        // 构建结果
+        BareResult result = new BareResult(MediaType.VIDEO);
+        List<BareResult.Video> videos = new ArrayList<>();
+        result.setVideos(videos);
+
         // 获取URL参数
         Map<String, List<String>> queryParams = StringUtil.getQueryParams(url);
 
@@ -44,18 +60,28 @@ public class PiPiGaoXiaoParser implements BareParser {
                 .body(JSONUtil.toJsonStr(map))
                 .execute()
                 .body();
-        JSONObject jsonObject = JSONUtil.parseObj(jsonStr).getJSONObject("data").getJSONObject("post").getJSONObject("videos");
-        Set<String> set = jsonObject.keySet();
+
+        JSONObject postObject = JSONUtil.parseObj(jsonStr)
+                .getJSONObject("data")
+                .getJSONObject("post");
+
+        JSONObject videosObject = postObject.getJSONObject("videos");
+
+        Set<String> set = videosObject.keySet();
         String thumb = null;
         for (String item : set) {
             thumb = item;
         }
-        String videoUrl = (String) jsonObject.getJSONObject(thumb).get("url");
+        JSONObject thumbObject = videosObject.getJSONObject(thumb);
 
-        List<String> urlList = new ArrayList<>();
-        urlList.add(videoUrl);
+        // 标题、封面
+        result.setTitle(postObject.getStr("content"))
+                .setCover(new BareResult.Image("https://file.ippzone.com/img/view/id/" +
+                        postObject.getJSONArray("imgs").getJSONObject(0).getStr("id")));
 
-//        return new BareResult(urlList);
-        return null;
+        // 视频信息
+        videos.add(new BareResult.Video(thumbObject.getStr("url")));
+
+        return result;
     }
 }

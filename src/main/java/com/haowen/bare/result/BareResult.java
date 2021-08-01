@@ -39,6 +39,10 @@ public class BareResult {
     @Data
     public static class Video {
 
+        public Video(String url) {
+            this.url = url;
+        }
+
         @Deprecated
         public Video(String url, String cover) {
             this.url = url;
