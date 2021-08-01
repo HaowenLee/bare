@@ -2,7 +2,7 @@ package com.haowen.bare.parse.parser;
 
 import cn.hutool.json.JSONUtil;
 import com.haowen.bare.parse.BareParser;
-import com.haowen.bare.result.BareResResult;
+import com.haowen.bare.result.BareResult;
 import com.haowen.bare.utils.StringUtil;
 import com.haowen.bare.utils.UserAgentUtil;
 import org.jsoup.Jsoup;
@@ -28,7 +28,7 @@ public class QingShiPingParser implements BareParser {
      * 方法描述:短视频解析
      */
     @Override
-    public BareResResult parse(String url) throws IOException {
+    public BareResult parse(String url) throws IOException {
 
         Map<String, List<String>> queryParams = StringUtil.getQueryParams(url);
 
@@ -51,6 +51,7 @@ public class QingShiPingParser implements BareParser {
         List<String> list = new ArrayList<>();
         list.add(videoUrl);
 
-        return new BareResResult(list);
+//        return new BareResult(list);
+        return null;
     }
 }

@@ -3,7 +3,8 @@ package com.haowen.bare.parse.parser;
 import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
 import com.haowen.bare.parse.BareParser;
-import com.haowen.bare.result.BareResResult;
+import com.haowen.bare.parse.enums.MediaType;
+import com.haowen.bare.result.BareResult;
 import com.haowen.bare.utils.UserAgentUtil;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -26,7 +27,7 @@ public class ZuiYouParser implements BareParser {
      * @param url 链接地址
      */
     @Override
-    public BareResResult parse(String url) throws IOException {
+    public BareResult parse(String url) throws IOException {
         Document document = Jsoup
                 .connect(url)
                 .header("User-Agent", UserAgentUtil.getOne())
@@ -52,9 +53,14 @@ public class ZuiYouParser implements BareParser {
         String videoUrl = (String) jsonObject.getJSONObject(thumb)
                 .getObj("url");
 
-        List<String> urlList = new ArrayList<>();
-        urlList.add(videoUrl);
+        // 构建结果
+        BareResult result = new BareResult();
+        result.setType(MediaType.VIDEO);
+        List<BareResult.Video> videos = new ArrayList<>();
+        result.setVideos(videos);
+        BareResult.Video videoResult = new BareResult.Video(videoUrl, null);
+        videos.add(videoResult);
 
-        return new BareResResult(urlList);
+        return result;
     }
 }

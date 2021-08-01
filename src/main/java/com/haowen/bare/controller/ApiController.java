@@ -1,10 +1,9 @@
 package com.haowen.bare.controller;
 
-import com.haowen.bare.result.BareResResult;
+import com.haowen.bare.result.BareResult;
 import com.haowen.bare.service.BareService;
 import com.haowen.bare.utils.ResponseUtil;
 import com.haowen.bare.utils.ReturnObject;
-import com.sun.istack.internal.NotNull;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -19,7 +18,7 @@ import java.io.IOException;
 /**
  * 外部接口
  */
-@Api(tags = "对外接口")
+@Api(tags = "短视频/图片去水印")
 @RestController
 public class ApiController {
 
@@ -31,9 +30,9 @@ public class ApiController {
      *
      * @param link 复制的链接
      */
-    @ApiOperation(value = "通用解析", response = BareResResult.class)
+    @ApiOperation(value = "聚合接口", response = BareResult.class)
     @PostMapping("/bare")
-    private ReturnObject<BareResResult> bare(
+    private ReturnObject<BareResult> bare(
             @NotBlank(message = "请输入复制链接")
             @ApiParam("复制的链接")
             @RequestParam("link") String link) throws IOException {

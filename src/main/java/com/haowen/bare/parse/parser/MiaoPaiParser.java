@@ -2,7 +2,7 @@ package com.haowen.bare.parse.parser;
 
 import cn.hutool.json.JSONUtil;
 import com.haowen.bare.parse.BareParser;
-import com.haowen.bare.result.BareResResult;
+import com.haowen.bare.result.BareResult;
 import com.haowen.bare.utils.UserAgentUtil;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -31,7 +31,7 @@ public class MiaoPaiParser implements BareParser {
      * @return 无水印资源信息
      */
     @Override
-    public BareResResult parse(String url) throws IOException {
+    public BareResult parse(String url) throws IOException {
 
         // 获取分享资源信息
         Document document = Jsoup
@@ -52,7 +52,8 @@ public class MiaoPaiParser implements BareParser {
         List<String> urlList = new ArrayList<>();
         urlList.add(videoUrl);
 
-        return new BareResResult(urlList);
+//        return new BareResult(urlList);
+        return null;
     }
 
     /**

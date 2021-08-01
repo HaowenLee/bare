@@ -2,12 +2,9 @@ package com.haowen.bare.parse.parser;
 
 import cn.hutool.core.util.RandomUtil;
 import cn.hutool.core.util.URLUtil;
-import cn.hutool.json.JSONArray;
-import cn.hutool.json.JSONNull;
-import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
 import com.haowen.bare.parse.BareParser;
-import com.haowen.bare.result.BareResResult;
+import com.haowen.bare.result.BareResult;
 import com.haowen.bare.utils.UrlUtil;
 import com.haowen.bare.utils.UserAgentUtil;
 import org.jsoup.Jsoup;
@@ -38,7 +35,7 @@ public class LiShiPinParser implements BareParser {
      * @return 无水印资源信息
      */
     @Override
-    public BareResResult parse(String url) throws IOException {
+    public BareResult parse(String url) throws IOException {
 
         String userAgent = UserAgentUtil.getOne();
         String realUrl = UrlUtil.getRealUrl(userAgent, url);
@@ -67,7 +64,8 @@ public class LiShiPinParser implements BareParser {
         List<String> urlList = new ArrayList<>();
         urlList.add(videoUrl);
 
-        return new BareResResult(urlList);
+//        return new BareResult(urlList);
+        return null;
     }
 
     /**

@@ -3,7 +3,7 @@ package com.haowen.bare.service;
 
 import com.haowen.bare.parse.BareParser;
 import com.haowen.bare.parse.ParserFactory;
-import com.haowen.bare.result.BareResResult;
+import com.haowen.bare.result.BareResult;
 import com.haowen.bare.utils.BizException;
 import com.haowen.bare.utils.ErrorCode;
 import com.haowen.bare.utils.StringUtil;
@@ -23,7 +23,7 @@ public class BareService {
      *
      * @param link 复制的链接
      */
-    public BareResResult parse(String link) throws IOException {
+    public BareResult parse(String link) throws IOException {
         BareParser parser = parserFactory.getParser(link);
         if (parser == null) {
             throw new BizException(ErrorCode.NOT_SUPPORTED_PLATFORM_ERROR.value(), ErrorCode.NOT_SUPPORTED_PLATFORM_ERROR.msg());

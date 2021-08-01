@@ -4,7 +4,7 @@ import cn.hutool.http.HttpUtil;
 import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
 import com.haowen.bare.parse.BareParser;
-import com.haowen.bare.result.BareResResult;
+import com.haowen.bare.result.BareResult;
 import com.haowen.bare.utils.StringUtil;
 import com.haowen.bare.utils.UserAgentUtil;
 import org.springframework.stereotype.Component;
@@ -28,7 +28,7 @@ public class PiPiGaoXiaoParser implements BareParser {
      * @param url 链接地址
      */
     @Override
-    public BareResResult parse(String url) {
+    public BareResult parse(String url) {
 
         // 获取URL参数
         Map<String, List<String>> queryParams = StringUtil.getQueryParams(url);
@@ -55,6 +55,7 @@ public class PiPiGaoXiaoParser implements BareParser {
         List<String> urlList = new ArrayList<>();
         urlList.add(videoUrl);
 
-        return new BareResResult(urlList);
+//        return new BareResult(urlList);
+        return null;
     }
 }

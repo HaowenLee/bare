@@ -1,7 +1,8 @@
 package com.haowen.bare.parse.parser;
 
 import com.haowen.bare.parse.BareParser;
-import com.haowen.bare.result.BareResResult;
+import com.haowen.bare.parse.enums.MediaType;
+import com.haowen.bare.result.BareResult;
 import com.haowen.bare.utils.UserAgentUtil;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -14,6 +15,15 @@ import java.util.List;
 
 /**
  * 快手解析器
+ * ==============================================================
+ * User-Agent Mobile
+ * 1. 获取html内容
+ * 4. 解析获取想要的结果
+ * --------------------------------------------------------------
+ * 标题 -> null
+ * 封面 -> data -> item_info -> cover
+ * 视频 -> data -> item_info -> url
+ * ==============================================================
  */
 @Component
 public class KuaiShouParser implements BareParser {
@@ -24,17 +34,20 @@ public class KuaiShouParser implements BareParser {
      * @param url 链接地址
      */
     @Override
-    public BareResResult parse(String url) throws IOException {
+    public BareResult parse(String url) throws IOException {
         Document document = Jsoup
                 .connect(url)
-                .header("User-Agent", UserAgentUtil.getOne())
+                .userAgent(UserAgentUtil.getOne())
                 .get();
 
-        Element video = document.getElementsByTag("video").get(0);
+        // 构建结果
+        BareResult result = new BareResult(MediaType.VIDEO);
+        List<BareResult.Video> videos = new ArrayList<>();
+        result.setVideos(videos);
 
-        List<String> urlList = new ArrayList<>();
-        urlList.add(video.attr("src"));
+        String videoUrl = document.getElementsByTag("video").get(0).attr("src");
+        videos.add(new BareResult.Video(videoUrl, null, null, null));
 
-        return new BareResResult(urlList);
+        return result;
     }
 }

@@ -2,7 +2,8 @@ package com.haowen.bare.parse.parser;
 
 import cn.hutool.json.JSONUtil;
 import com.haowen.bare.parse.BareParser;
-import com.haowen.bare.result.BareResResult;
+import com.haowen.bare.parse.enums.MediaType;
+import com.haowen.bare.result.BareResult;
 import com.haowen.bare.utils.StringUtil;
 import com.haowen.bare.utils.UrlUtil;
 import com.haowen.bare.utils.UserAgentUtil;
@@ -28,7 +29,7 @@ public class XinPianChangParser implements BareParser {
      * 方法描述:短视频解析
      */
     @Override
-    public BareResResult parse(String url) throws IOException {
+    public BareResult parse(String url) throws IOException {
 
         String userAgent = UserAgentUtil.getOne();
         // 获取分享资源信息
@@ -49,10 +50,15 @@ public class XinPianChangParser implements BareParser {
                 .getJSONObject(2)
                 .getObj("url");
 
-        List<String> list = new ArrayList<>();
-        list.add(videoUrl);
+        // 构建结果
+        BareResult result = new BareResult();
+        result.setType(MediaType.VIDEO);
+        List<BareResult.Video> videos = new ArrayList<>();
+        result.setVideos(videos);
+        BareResult.Video videoResult = new BareResult.Video(videoUrl, null);
+        videos.add(videoResult);
 
-        return new BareResResult(list);
+        return result;
     }
 
     /**

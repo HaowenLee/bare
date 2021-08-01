@@ -4,7 +4,7 @@ import cn.hutool.core.codec.Base64;
 import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
 import com.haowen.bare.parse.BareParser;
-import com.haowen.bare.result.BareResResult;
+import com.haowen.bare.result.BareResult;
 import com.haowen.bare.utils.UrlUtil;
 import com.haowen.bare.utils.UserAgentUtil;
 import org.jsoup.Jsoup;
@@ -30,7 +30,7 @@ public class XiGuaParser implements BareParser {
      * 方法描述:短视频解析
      */
     @Override
-    public BareResResult parse(String url) throws IOException {
+    public BareResult parse(String url) throws IOException {
 
         String userAgent = UserAgentUtil.getPC();
 
@@ -72,7 +72,8 @@ public class XiGuaParser implements BareParser {
         List<String> list = new ArrayList<>();
         list.add(video);
 
-        return new BareResResult(list);
+//        return new BareResult(list);
+        return null;
     }
 
     /**

@@ -2,10 +2,9 @@ package com.haowen.bare.parse.parser;
 
 import cn.hutool.json.JSONUtil;
 import com.haowen.bare.parse.BareParser;
-import com.haowen.bare.result.BareResResult;
+import com.haowen.bare.result.BareResult;
 import com.haowen.bare.utils.UserAgentUtil;
 import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -24,7 +23,7 @@ public class QuanMingKGeParser implements BareParser {
      * 方法描述:短视频解析
      */
     @Override
-    public BareResResult parse(String url) throws IOException {
+    public BareResult parse(String url) throws IOException {
 
         // 获取分享资源信息
         String html = Jsoup
@@ -45,7 +44,8 @@ public class QuanMingKGeParser implements BareParser {
         List<String> list = new ArrayList<>();
         list.add(videoUrl);
 
-        return new BareResResult(list);
+//        return new BareResult(list);
+        return null;
     }
 
     /**

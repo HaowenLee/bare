@@ -1,8 +1,10 @@
 package com.haowen.bare.parse.parser;
 
+import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
 import com.haowen.bare.parse.BareParser;
-import com.haowen.bare.result.BareResResult;
+import com.haowen.bare.parse.enums.MediaType;
+import com.haowen.bare.result.BareResult;
 import com.haowen.bare.utils.StringUtil;
 import com.haowen.bare.utils.UserAgentUtil;
 import org.jsoup.Connection;
@@ -16,6 +18,16 @@ import java.util.Map;
 
 /**
  * 逗拍解析器
+ * ==============================================================
+ * User-Agent Mobile
+ * 1. 获取分享链接ID（参数形式）
+ * 2. 请求接口获取数据json
+ * 3. 解析获取想要的结果
+ * --------------------------------------------------------------
+ * 标题 -> data -> name
+ * 封面 -> data -> imageUrl
+ * 视频 -> data => (videoUrl, null, width, height)
+ * ==============================================================
  */
 @Component
 public class DouPaiParser implements BareParser {
@@ -31,7 +43,12 @@ public class DouPaiParser implements BareParser {
      * @param url 链接地址
      */
     @Override
-    public BareResResult parse(String url) throws IOException {
+    public BareResult parse(String url) throws IOException {
+
+        // 构建结果
+        BareResult result = new BareResult(MediaType.VIDEO);
+        List<BareResult.Video> videos = new ArrayList<>();
+        result.setVideos(videos);
 
         Map<String, List<String>> queryParams = StringUtil.getQueryParams(url);
 
@@ -44,13 +61,21 @@ public class DouPaiParser implements BareParser {
                 .execute()
                 .body();
 
-        String videoUrl = (String) JSONUtil.parseObj(jsonStr)
-                .getJSONObject("data")
-                .getObj("videoUrl");
+        JSONObject data = JSONUtil.parseObj(jsonStr)
+                .getJSONObject("data");
 
-        List<String> urlList = new ArrayList<>();
-        urlList.add(videoUrl);
+        // 标题、封面
+        result.setTitle(data.getStr("name"))
+                .setCover(new BareResult.Image(data.getStr("imageUrl")));
 
-        return new BareResResult(urlList);
+        // 视频信息
+        videos.add(new BareResult.Video(
+                data.getStr("videoUrl"),
+                null,
+                data.getInt("width"),
+                data.getInt("height")
+        ));
+
+        return result;
     }
 }

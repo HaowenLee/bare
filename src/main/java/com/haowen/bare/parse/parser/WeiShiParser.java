@@ -3,7 +3,7 @@ package com.haowen.bare.parse.parser;
 import cn.hutool.http.HttpUtil;
 import cn.hutool.json.JSONUtil;
 import com.haowen.bare.parse.BareParser;
-import com.haowen.bare.result.BareResResult;
+import com.haowen.bare.result.BareResult;
 import com.haowen.bare.utils.StringUtil;
 import com.haowen.bare.utils.UserAgentUtil;
 import org.springframework.stereotype.Component;
@@ -28,7 +28,7 @@ public class WeiShiParser implements BareParser {
      * 方法描述:短视频解析
      */
     @Override
-    public BareResResult parse(String url) {
+    public BareResult parse(String url) {
 
         String feedId = StringUtil.getQueryParams(url).get("id").get(0);
 
@@ -55,6 +55,7 @@ public class WeiShiParser implements BareParser {
         List<String> urlList = new ArrayList<>();
         urlList.add(videoUrl);
 
-        return new BareResResult(urlList);
+//        return new BareResult(urlList);
+        return null;
     }
 }

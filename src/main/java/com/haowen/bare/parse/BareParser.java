@@ -1,6 +1,6 @@
 package com.haowen.bare.parse;
 
-import com.haowen.bare.result.BareResResult;
+import com.haowen.bare.result.BareResult;
 
 import java.io.IOException;
 
@@ -15,5 +15,5 @@ public interface BareParser {
      * @param link 复制的链接
      * @return 无水印资源信息
      */
-    BareResResult parse(String link) throws IOException;
+    BareResult parse(String link) throws IOException;
 }
