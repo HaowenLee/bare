@@ -17,6 +17,16 @@ import java.util.List;
 
 /**
  * 最右解析器
+ * ==============================================================
+ * User-Agent Mobile
+ * 1. 分享链接获取html内容
+ * 2. 获取html里的数据json（正则）
+ * 3. 解析获取想要的结果
+ * --------------------------------------------------------------
+ * 标题 -> sharePost -> postDetail -> post -> content
+ * 封面 -> sharePost -> postDetail -> post -> videos -> thumb(Var) -> coverUrls[0]
+ * 视频 -> sharePost -> postDetail -> post -> videos -> thumb(Var) -> url
+ * ==============================================================
  */
 @Component
 public class ZuiYouParser implements BareParser {
@@ -28,9 +38,15 @@ public class ZuiYouParser implements BareParser {
      */
     @Override
     public BareResult parse(String url) throws IOException {
+
+        // 构建结果
+        BareResult result = new BareResult(MediaType.VIDEO);
+        List<BareResult.Video> videos = new ArrayList<>();
+        result.setVideos(videos);
+
         Document document = Jsoup
                 .connect(url)
-                .header("User-Agent", UserAgentUtil.getOne())
+                .userAgent(UserAgentUtil.getOne())
                 .get();
 
         Element element = document.getElementById("appState");
@@ -40,26 +56,27 @@ public class ZuiYouParser implements BareParser {
                 .replace("new Date(", "")
                 .replace(")", "");
 
-        JSONObject jsonObject = JSONUtil.parseObj(filter)
+        JSONObject postObject = JSONUtil.parseObj(filter)
                 .getJSONObject("sharePost")
                 .getJSONObject("postDetail")
-                .getJSONObject("post")
-                .getJSONObject("videos");
+                .getJSONObject("post");
+
+        JSONObject videosObject = postObject.getJSONObject("videos");
 
         String thumb = "";
-        for (String key : jsonObject.keySet()) {
+        for (String key : videosObject.keySet()) {
             thumb = key;
         }
-        String videoUrl = (String) jsonObject.getJSONObject(thumb)
-                .getObj("url");
+        JSONObject thumbObject = videosObject.getJSONObject(thumb);
 
-        // 构建结果
-        BareResult result = new BareResult();
-        result.setType(MediaType.VIDEO);
-        List<BareResult.Video> videos = new ArrayList<>();
-        result.setVideos(videos);
-        BareResult.Video videoResult = new BareResult.Video(videoUrl, null);
-        videos.add(videoResult);
+        // 标题、封面
+        result.setTitle(postObject.getStr("content"))
+                .setCover(new BareResult.Image(thumbObject.getJSONArray("coverUrls").getStr(0)));
+
+        // 视频
+        String videoUrl = thumbObject.getStr("url");
+
+        videos.add(new BareResult.Video(videoUrl, null, null, null));
 
         return result;
     }
