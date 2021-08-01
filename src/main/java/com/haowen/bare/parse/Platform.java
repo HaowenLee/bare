@@ -14,7 +14,7 @@ public enum Platform {
     PI_PI_GAO_XIAO("皮皮搞笑", "h5.pipigx.com", PiPiGaoXiaoParser.class),
     HUO_SHAN("抖音火山版", "share.huoshan.com", HuoShanParser.class),
     ZUI_YOU("最右", "izuiyou.com", ZuiYouParser.class),
-    XI_GUA("西瓜", "v.ixigua.com", XiGuaParser.class),
+    XI_GUA("西瓜视频", "ixigua.com", XiGuaParser.class),
     QING_SHI_PING("轻视频", "bbq.bilibili.com", QingShiPingParser.class),
     XIN_PIAN_CHANGE("新片场", "www.xinpianchang.com", XinPianChangParser.class),
     WEI_BO("微博", "video.weibo.com", WeiBoParser.class),

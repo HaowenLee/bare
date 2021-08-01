@@ -1,9 +1,11 @@
 package com.haowen.bare.parse.parser;
 
 import cn.hutool.core.codec.Base64;
+import cn.hutool.json.JSONArray;
 import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
 import com.haowen.bare.parse.BareParser;
+import com.haowen.bare.parse.enums.MediaType;
 import com.haowen.bare.result.BareResult;
 import com.haowen.bare.utils.UrlUtil;
 import com.haowen.bare.utils.UserAgentUtil;
@@ -16,7 +18,20 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * 西瓜解析器
+ * 西瓜视频解析器
+ * ==============================================================
+ * User-Agent Mobile
+ * 1. 获取重定向地址
+ * 2. 获取分享链接ID（路径形式）
+ * 3. 获取html内容
+ * 4. 获取数据json
+ * 5. 解析获取想要的结果
+ * --------------------------------------------------------------
+ * 标题 -> anyVideo -> gidInformation -> packerData -> video -> title
+ * 封面 -> anyVideo -> gidInformation -> packerData -> video -> poster_url
+ * 视频 -> anyVideo -> gidInformation -> packerData -> video -> dash -> dynamic_video -> dynamic_video_list =>
+ * (main_url, definition, vwidth, vheight)
+ * ==============================================================
  */
 @Component
 public class XiGuaParser implements BareParser {
@@ -32,6 +47,11 @@ public class XiGuaParser implements BareParser {
     @Override
     public BareResult parse(String url) throws IOException {
 
+        // 构建结果
+        BareResult result = new BareResult(MediaType.VIDEO);
+        List<BareResult.Video> videos = new ArrayList<>();
+        result.setVideos(videos);
+
         String userAgent = UserAgentUtil.getPC();
 
         String realUrl = UrlUtil.getRealUrl(userAgent, url);
@@ -40,7 +60,7 @@ public class XiGuaParser implements BareParser {
         // 获取分享资源信息
         Document document = Jsoup
                 .connect(API + itemId)
-                .header("User-Agent", userAgent)
+                .userAgent(userAgent)
                 .header("cookie", "MONITOR_WEB_ID=7892c49b-296e-4499-8704-e47c1b150c18; ixigua-a-s=1; ttcid=" +
                         "af99669b6304453480454f150701d5c226; BD_REF=1; __ac_nonce=060d88ff000a75e8d17eb; " +
                         "__ac_signature=_02B4Z6wo00f01kX9ZpgAAIDAKIBBQUIPYT5F2WIAAPG2ad; " +
@@ -53,27 +73,33 @@ public class XiGuaParser implements BareParser {
                 .replace("window._SSR_HYDRATED_DATA=", "")
                 .replace("undefined", "null");
 
-        JSONObject result = JSONUtil.parseObj(jsonStr)
+        JSONObject videoObject = JSONUtil.parseObj(jsonStr)
                 .getJSONObject("anyVideo")
                 .getJSONObject("gidInformation")
                 .getJSONObject("packerData")
                 .getJSONObject("video");
 
-        String video = (String) result.getJSONObject("videoResource")
+        // 标题、封面
+        result.setTitle(videoObject.getStr("title"))
+                .setCover(new BareResult.Image(videoObject.getStr("poster_url")));
+
+        JSONArray videoInfoList = videoObject.getJSONObject("videoResource")
                 .getJSONObject("dash")
                 .getJSONObject("dynamic_video")
-                .getJSONArray("dynamic_video_list")
-                .getJSONObject(2)
-                .getObj("main_url");
+                .getJSONArray("dynamic_video_list");
 
-        video = Base64.decodeStr(video);
+        // 视频信息
+        for (int i = 0; i < videoInfoList.size(); i++) {
+            JSONObject item = videoInfoList.getJSONObject(i);
+            videos.add(new BareResult.Video(
+                    Base64.decodeStr(item.getStr("main_url")),
+                    item.getStr("definition"),
+                    item.getInt("vwidth"),
+                    item.getInt("vheight")
+            ));
+        }
 
-
-        List<String> list = new ArrayList<>();
-        list.add(video);
-
-//        return new BareResult(list);
-        return null;
+        return result;
     }
 
     /**
