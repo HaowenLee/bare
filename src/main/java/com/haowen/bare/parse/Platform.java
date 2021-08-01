@@ -17,7 +17,7 @@ public enum Platform {
     XI_GUA("西瓜视频", "ixigua.com", XiGuaParser.class),
     QING_SHI_PING("轻视频", "bbq.bilibili.com", QingShiPingParser.class),
     XIN_PIAN_CHANGE("新片场", "www.xinpianchang.com", XinPianChangParser.class),
-    WEI_BO("微博", "video.weibo.com", WeiBoParser.class),
+    WEI_BO("微博", "video.weibo", WeiBoParser.class),
     AC_FUN("AcFun", "m.acfun.cn", AcFunParser.class),
     LI_SHI_PIN("梨视频", "www.pearvideo.com", LiShiPinParser.class),
     DOU_PAI("逗拍", "p.doupai.cc", DouPaiParser.class),

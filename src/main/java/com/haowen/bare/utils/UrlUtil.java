@@ -20,7 +20,8 @@ public class UrlUtil {
     public static String getRealUrl(String userAgent, String url) throws IOException {
         return Jsoup.connect(url)
                 .userAgent(userAgent)
-                .method(Connection.Method.GET).execute()
+                .method(Connection.Method.GET)
+                .execute()
                 .url().toString();
     }
 }
