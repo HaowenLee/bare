@@ -99,7 +99,7 @@ class BareApplicationTests {
      */
     @Test
     void liShiPinTest() throws IOException {
-        parse(Platform.LI_SHI_PIN, "6.97 xsE:/ “浪漫至死不渝，我比你想象中更加深情”%你的名字   https://v.douyin.com/e3md8Sv/ 復制此鏈接，打开Dou音搜索，直接观看視频！");
+        parse(Platform.LI_SHI_PIN, "https://www.pearvideo.com/detail_1111663?st=7");
     }
 
     /**

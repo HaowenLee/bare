@@ -1,6 +1,5 @@
 package com.haowen.bare.utils;
 
-import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 
 import java.io.IOException;
@@ -20,7 +19,7 @@ public class UrlUtil {
     public static String getRealUrl(String userAgent, String url) throws IOException {
         return Jsoup.connect(url)
                 .userAgent(userAgent)
-                .method(Connection.Method.GET)
+                .followRedirects(true)
                 .execute()
                 .url().toString();
     }
