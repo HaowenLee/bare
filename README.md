@@ -22,4 +22,6 @@
 
 ## 最后
 
-如果您觉得我的开源库帮你节省了大量的开发时间，请扫描下方的二维码随意打赏，要是能打赏个 10.24 🐵就太👍了。您的支持将鼓励我继续创作:octocat:
+**如果您觉得我的开源库帮你节省了大量的开发时间，请扫描下方的二维码随意打赏，要是能打赏个 10.24** **:monkey_face:****就太****:thumbsup:****了。您的支持将鼓励我继续创作****:octocat:**
+
+<img src="https://raw.githubusercontent.com/HaowenLee/bare/master/donate/alipay.png" style="zoom:80%;" /><img src="https://raw.githubusercontent.com/HaowenLee/bare/master/donate/wechat.png" style="zoom:80%;" />
