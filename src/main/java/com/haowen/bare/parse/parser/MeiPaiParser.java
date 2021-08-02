@@ -2,13 +2,13 @@ package com.haowen.bare.parse.parser;
 
 import cn.hutool.core.codec.Base64;
 import cn.hutool.core.collection.CollectionUtil;
+import cn.hutool.core.lang.Pair;
 import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
 import com.haowen.bare.parse.BareParser;
 import com.haowen.bare.parse.enums.MediaType;
 import com.haowen.bare.result.BareResult;
 import com.haowen.bare.utils.UserAgentUtil;
-import javafx.util.Pair;
 import org.jsoup.Jsoup;
 import org.springframework.stereotype.Component;
 
