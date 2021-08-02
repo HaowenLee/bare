@@ -19,9 +19,7 @@ public class UserAgentUtil {
 
     public static String getOne() {
         int random = RandomUtil.randomInt(0, USER_AGENT_ARRAY.length - 1);
-        String s = USER_AGENT_ARRAY[random];
-        System.out.println(s);
-        return s;
+        return USER_AGENT_ARRAY[random];
     }
 
     public static String getPC() {

@@ -103,6 +103,14 @@ class BareApplicationTests {
     }
 
     /**
+     * 美拍
+     */
+    @Test
+    void meiPaiTest() throws IOException {
+        parse(Platform.MEI_PAI, "向姐姐们的大长腿看齐 http://www.meipai.com/video/863/6826061694944437551?client_id=1089857302&utm_media_id=6826061694944437551&utm_source=meipai_share&utm_term=meipai_android&gid=2185880175&utm_content=9458&utm_share_type=3");
+    }
+
+    /**
      * 皮皮搞笑
      */
     @Test
