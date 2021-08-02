@@ -1,5 +1,7 @@
 ![bare](https://socialify.git.ci/HaowenLee/bare/image?language=1&owner=1&theme=Light)
 
+获取无水印资源，不断更新中...
+
 ## 支持平台
 
 | 平台       | 状态 | 平台       | 状态 | 平台     | 状态 | 平台    | 状态 | 平台     | 状态 |
@@ -9,6 +11,10 @@
 | 皮皮搞笑   | ✔    | 皮皮虾     | ✔    | 轻视频   | ✔    | 全民K歌 | ✔    | VUE Vlog | ✔    |
 | 微博       | ✔    | 微视       | ✔    | 西瓜视频 | ✔    | 新片场  | ✔    | 最右     | ✔    |
 | 好看视频   | ✖    |            |      |          |      |         |      |          |      |
+
+## 接口体验
+
+[http://118.24.17.109:8621/swagger-ui.html](http://118.24.17.109:8621/swagger-ui.html)
 
 ## 免责声明
 
