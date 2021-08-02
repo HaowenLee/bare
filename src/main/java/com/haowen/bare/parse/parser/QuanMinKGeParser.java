@@ -28,7 +28,7 @@ import java.util.regex.Pattern;
  * ==============================================================
  */
 @Component
-public class QuanMingKGeParser implements BareParser {
+public class QuanMinKGeParser implements BareParser {
 
     /**
      * 方法描述:短视频解析

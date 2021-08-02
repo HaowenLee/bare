@@ -1,5 +1,6 @@
 package com.haowen.bare.parse.parser;
 
+import cn.hutool.json.JSONArray;
 import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
 import com.haowen.bare.parse.BareParser;
@@ -24,7 +25,7 @@ import java.util.List;
  * 3. 解析获取想要的结果
  * --------------------------------------------------------------
  * 标题 -> sharePost -> postDetail -> post -> content
- * 封面 -> sharePost -> postDetail -> post -> videos -> thumb(Var) -> coverUrls[0]
+ * 封面 -> sharePost -> postDetail -> post -> imgs[0] -> urls -> originWebp => (urls[0], w, h)
  * 视频 -> sharePost -> postDetail -> post -> videos -> thumb(Var) -> url
  * ==============================================================
  */
@@ -69,9 +70,18 @@ public class ZuiYouParser implements BareParser {
         }
         JSONObject thumbObject = videosObject.getJSONObject(thumb);
 
+        JSONObject coverObject = postObject.getJSONArray("imgs")
+                .getJSONObject(0)
+                .getJSONObject("urls")
+                .getJSONObject("originWebp");
+
         // 标题、封面
         result.setTitle(postObject.getStr("content"))
-                .setCover(new BareResult.Image(thumbObject.getJSONArray("coverUrls").getStr(0)));
+                .setCover(new BareResult.Image(
+                        coverObject.getJSONArray("urls").getStr(0),
+                        coverObject.getInt("w"),
+                        coverObject.getInt("h")
+                ));
 
         // 视频
         String videoUrl = thumbObject.getStr("url");

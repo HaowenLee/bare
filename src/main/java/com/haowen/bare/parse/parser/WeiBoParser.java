@@ -79,7 +79,7 @@ public class WeiBoParser implements BareParser {
         JSONObject streamObject = object.getJSONObject("stream");
 
         // 标题、封面
-        result.setTitle(null)
+        result.setTitle(object.getStr("summary"))
                 .setCover(new BareResult.Image(
                         object.getJSONObject("image").getStr("url"),
                         object.getJSONObject("image").getInt("width"),

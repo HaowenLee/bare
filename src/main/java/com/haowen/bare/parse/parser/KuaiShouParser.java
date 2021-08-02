@@ -12,6 +12,8 @@ import org.springframework.stereotype.Component;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * 快手解析器
@@ -45,9 +47,38 @@ public class KuaiShouParser implements BareParser {
         List<BareResult.Video> videos = new ArrayList<>();
         result.setVideos(videos);
 
-        String videoUrl = document.getElementsByTag("video").get(0).attr("src");
-        videos.add(new BareResult.Video(videoUrl, null, null, null));
+        // 封面
+        String cover = regexCoverUrl(document.getElementsByClass("poster-content").attr("style"));
+
+        Element videoElement = document.getElementsByTag("video").get(0);
+        // 标题
+        String title = videoElement.attr("alt");
+
+        // 视频
+        String videoUrl = videoElement.attr("src");
+
+        result.setTitle(title)
+                .setCover(new BareResult.Image(cover))
+                .getVideos().add(new BareResult.Video(videoUrl, null, null, null));
 
         return result;
+    }
+
+    /**
+     * 方法描述: 正则获取封面图
+     *
+     * @param style 网页内容
+     */
+    public static String regexCoverUrl(String style) {
+        // 匹配网址
+        String regex = "background-image:url\\((.*?)\\);";
+        Pattern p = Pattern.compile(regex);
+        Matcher m = p.matcher(style);
+        if (m.find()) {
+            return style.substring(m.start(), m.end())
+                    .replace("background-image:url(", "")
+                    .replace(");", "");
+        }
+        return "";
     }
 }

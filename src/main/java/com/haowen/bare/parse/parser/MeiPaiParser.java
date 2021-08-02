@@ -22,11 +22,6 @@ import java.util.List;
 public class MeiPaiParser implements BareParser {
 
     /**
-     * 获取视频接口地址
-     */
-    private static final String API = "https://www.ixigua.com/";
-
-    /**
      * 方法描述:短视频解析
      */
     @Override
@@ -66,16 +61,5 @@ public class MeiPaiParser implements BareParser {
         videos.add(new BareResult.Video(videoUrl));
 
         return result;
-    }
-
-    /**
-     * 方法描述: 获取分享视频id
-     *
-     * @param url 分享链接
-     */
-    public String getItemId(String url) {
-        int start = url.indexOf("ixigua.com/") + "ixigua.com/".length();
-        int end = url.lastIndexOf("?");
-        return url.substring(start, end);
     }
 }
