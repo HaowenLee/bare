@@ -1,3 +1,5 @@
+![bare](https://socialify.git.ci/HaowenLee/bare/image?language=1&owner=1&theme=Light)
+
 ## 支持平台
 
 | 平台       | 状态 | 平台       | 状态 | 平台     | 状态 | 平台    | 状态 | 平台     | 状态 |
