@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 import javax.validation.constraints.NotBlank;
-import java.io.IOException;
 
 /**
  * 外部接口
@@ -35,7 +34,7 @@ public class ApiController {
     private ReturnObject<BareResult> bare(
             @NotBlank(message = "请输入复制链接")
             @ApiParam("复制的链接")
-            @RequestParam("link") String link) throws IOException {
+            @RequestParam("link") String link) throws Exception {
         return ResponseUtil.ok(bareService.parse(link));
     }
 }

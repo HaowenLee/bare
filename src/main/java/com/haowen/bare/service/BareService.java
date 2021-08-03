@@ -10,7 +10,6 @@ import com.haowen.bare.utils.StringUtil;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import java.io.IOException;
 
 @Service
 public class BareService {
@@ -23,7 +22,7 @@ public class BareService {
      *
      * @param link 复制的链接
      */
-    public BareResult parse(String link) throws IOException {
+    public BareResult parse(String link) throws Exception {
         BareParser parser = parserFactory.getParser(link);
         if (parser == null) {
             throw new BizException(ErrorCode.NOT_SUPPORTED_PLATFORM_ERROR.value(), ErrorCode.NOT_SUPPORTED_PLATFORM_ERROR.msg());

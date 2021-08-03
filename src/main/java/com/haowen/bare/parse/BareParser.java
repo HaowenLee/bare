@@ -15,5 +15,5 @@ public interface BareParser {
      * @param link 复制的链接
      * @return 无水印资源信息
      */
-    BareResult parse(String link) throws IOException;
+    BareResult parse(String link) throws Exception;
 }
