@@ -103,6 +103,14 @@ class BareApplicationTests {
     }
 
     /**
+     * 绿洲
+     */
+    @Test
+    void lvZhouTest() throws IOException {
+        parse(Platform.LV_ZHOU, "女神写真｜张天爱 @Crystal张天爱 #张天爱蝴蝶结镂空裙 纯白蝴蝶结镂空长裙搭配金色高跟... @爱豆女神在绿洲APP发了一条超棒的动态，戳我看看>>https://m.oasis.weibo.cn/v1/h5/share?sid=4641658404078184");
+    }
+
+    /**
      * 美拍
      */
     @Test
