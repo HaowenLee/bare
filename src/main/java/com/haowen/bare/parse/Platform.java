@@ -27,7 +27,8 @@ public enum Platform {
     BEFORE("Before 避风", "m.hanyuhl.com", BeforeParser.class),
     QUAN_MING_K_GE("全民K歌", "kg3.qq.com", QuanMinKGeParser.class),
     DU_XIAO_SHI("度小视", "xspshare.baidu.com", DuXiaoShiParser.class),
-    MIAO_PAI("秒拍", "n.miaopai.com", MiaoPaiParser.class);
+    MIAO_PAI("秒拍", "miaopai.com", MiaoPaiParser.class),
+    KAI_YAN("开眼", "eyepetizer.net", KaiYanParser.class);
 
     private final String name;
     private final String domain;

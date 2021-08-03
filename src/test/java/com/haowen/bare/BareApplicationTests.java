@@ -87,6 +87,14 @@ class BareApplicationTests {
     }
 
     /**
+     * 开眼
+     */
+    @Test
+    void kaiYanTest() throws IOException {
+        parse(Platform.KAI_YAN, "https://m.eyepetizer.net/u1/video-detail?video_id=267766&resource_type=video&utm_campaign=routine&utm_medium=share&utm_source=weibo&uid=0&udid=e03fdb127ded489a842d5e0b4f6ea6a431c9285b&vc=7020001&vn=7.2.0&size=1080X2265&deviceModel=VOG-AL00&first_channel=testflight&last_channel=testflight&system_version_code=29");
+    }
+
+    /**
      * 快手
      */
     @Test
