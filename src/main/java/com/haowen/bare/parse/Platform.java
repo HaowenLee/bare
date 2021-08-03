@@ -29,7 +29,8 @@ public enum Platform {
     DU_XIAO_SHI("度小视", "xspshare.baidu.com", DuXiaoShiParser.class),
     MIAO_PAI("秒拍", "miaopai.com", MiaoPaiParser.class),
     KAI_YAN("开眼", "eyepetizer.net", KaiYanParser.class),
-    MO_MO("陌陌", "immomo.com", MoMoParser.class);
+    MO_MO("陌陌", "immomo.com", MoMoParser.class),
+    HU_YA("虎牙", "huya.com", HuYaParser.class);
 
     private final String name;
     private final String domain;

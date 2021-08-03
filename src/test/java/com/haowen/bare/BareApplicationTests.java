@@ -86,6 +86,14 @@ class BareApplicationTests {
     }
 
     /**
+     * 虎牙
+     */
+    @Test
+    void huYaTest() throws Exception {
+        parse(Platform.HU_YA, "http://v.huya.com/m/play/fans/531742009.html?source=android&sharetype=other&shareid=s6366141037850304773&platform=7&oexp=1389.1686%2C2114.2719%2C2163.2778%2C4890.7103%2C5372.7817%2C6773.9963%2C719.993%2C7936.11691%2C8274.12218%2C8943.13201%2C8977.13252%2C9052.13360%2C9081.13409%2C9090.13424%2C9102.13441%2C9108.13451%2C9129.13485%2C9145.13510%2C9148.13513%2C9175.13545%2C9208.13604%2C9218.13625%2Carcore_1.0&guid=0a439f97880005617b01ec52ed525a6f");
+    }
+
+    /**
      * 开眼
      */
     @Test
