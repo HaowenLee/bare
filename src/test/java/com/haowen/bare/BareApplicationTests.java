@@ -134,6 +134,14 @@ class BareApplicationTests {
     }
 
     /**
+     * 陌陌
+     */
+    @Test
+    void moMoTest() throws Exception {
+        parse(Platform.MO_MO, "https://m.immomo.com/s/moment/new-share-v2/ax10162362063.html?time=1628004007&name=zSVJpNjfRz+jfCrMQT06jg==&avatar=1C5C9130-A810-CAB8-DD8C-D227F02C2C5720210731&isdaren=0&isuploader=0&from=qqfriend");
+    }
+
+    /**
      * 皮皮搞笑
      */
     @Test

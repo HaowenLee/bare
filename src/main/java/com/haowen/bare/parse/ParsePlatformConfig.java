@@ -30,6 +30,7 @@ class ParsePlatformConfig {
             Platform.QUAN_MING_K_GE,
             Platform.DU_XIAO_SHI,
             Platform.MIAO_PAI,
-            Platform.KAI_YAN
+            Platform.KAI_YAN,
+            Platform.MO_MO
     };
 }

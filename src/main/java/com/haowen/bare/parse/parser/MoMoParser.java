@@ -1,19 +1,18 @@
 package com.haowen.bare.parse.parser;
 
+import cn.hutool.json.JSONObject;
+import cn.hutool.json.JSONUtil;
 import com.haowen.bare.parse.BareParser;
 import com.haowen.bare.parse.enums.MediaType;
 import com.haowen.bare.result.BareResult;
 import com.haowen.bare.utils.UserAgentUtil;
+import org.jsoup.Connection;
 import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * 绿洲解析器
@@ -37,11 +36,29 @@ public class MoMoParser implements BareParser {
         List<BareResult.Video> videos = new ArrayList<>();
         result.setVideos(videos);
 
-        // 获取网页信息
-        Document document = Jsoup
-                .connect(url)
+        // 获取Json
+        String jsonStr = Jsoup
+                .connect(API)
+                .method(Connection.Method.POST)
+                .header("Content-Type", "application/x-www-form-urlencoded")
+                .data("feedids", getId(url))
                 .userAgent(UserAgentUtil.getOne())
-                .get();
+                .referrer(url.split("\\?")[0])
+                .ignoreContentType(true)
+                .execute()
+                .body();
+
+        JSONObject dataObject = JSONUtil.parseObj(jsonStr)
+                .getJSONObject("data")
+                .getJSONArray("list")
+                .getJSONObject(0);
+
+        // 标题、封面
+        result.setTitle(dataObject.getStr("content"))
+                .setCover(new BareResult.Image(dataObject.getJSONObject("video").getStr("cover_play")));
+
+        // 视频
+        videos.add(new BareResult.Video(dataObject.getJSONObject("video").getStr("video_url")));
 
         return result;
     }
@@ -54,6 +71,6 @@ public class MoMoParser implements BareParser {
     public String getId(String url) {
         int start = url.indexOf("/new-share-v2/") + "/new-share-v2/".length();
         int end = url.lastIndexOf("?");
-        return url.substring(start, end);
+        return url.substring(start, end).replace(".html", "");
     }
 }
