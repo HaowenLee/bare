@@ -32,8 +32,8 @@ class BareApplicationTests {
         log.info("===========================================================================================");
         log.info("{}：{}", platform.getName(), result.toString());
         log.info("===========================================================================================");
-        assert result.getVideos().get(0) != null;
-        assert result.getCover().getUrl() != null;
+        assert result.getVideos() != null || result.getImages() != null;
+        assert result.getVideos() == null || result.getVideos().get(0).getUrl() != null;
     }
 
     /**
@@ -75,6 +75,14 @@ class BareApplicationTests {
     @Test
     void duXiaoShiTest() throws Exception {
         parse(Platform.DU_XIAO_SHI, "https://xspshare.baidu.com/88fc0154b588926c3abcbdd74a62f738?source=share-h5&pd=qm_share_mvideo&vid=4360835078718407166&shareTime=1627867933&shareid=1932363553&shared_cuid=_uBW8_8av8gx8v8Bja2sag8CSt0pu2uPgPvq8lulvfKkLl-uB&shared_uid=Al-uB");
+    }
+
+    /**
+     * 好看
+     */
+    @Test
+    void haoKanShiTest() throws Exception {
+        parse(Platform.HAO_KAN, "https://haokan.hao123.com/v?vid=2434682787138128513&pd=haokan_share&context=%7B%22cuid%22%3A%22_uBW8_8av8gx8v8Bja2sag8CSt0pu2uPgPvq8lulvfKkLqqqB%22%7D");
     }
 
     /**
@@ -203,6 +211,17 @@ class BareApplicationTests {
     @Test
     void weiShiTest() throws Exception {
         parse(Platform.WEI_SHI, "一条被水“断开”的公路，船在上面走车在底下开，设计感十足！>>https://isee.weishi.qq.com/ws/app-pages/share/index.html?wxplay=1&id=77nTk9kdd1M5JhOeS&collectionid=ai-60fecd4cddad6b010a08900a&spid=2124850950999772140&qua=v1_and_weishi_8.31.0_588_312026001_d&chid=100081003&pkg=&attach=cp_reserves3_1000370721");
+    }
+
+    /**
+     * 小红书
+     */
+    @Test
+    void xiaoHongShuTest() throws Exception {
+        // 图片
+        parse(Platform.XIAO_HONG_SHU, "13 CD视觉婚纱摄影发布了一篇小红书笔记，快来看吧！ \uD83D\uDE06 ky6HepJZ9zuPsUL \uD83D\uDE06 http://xhslink.com/Q6nfHd，复制本条信息，打开【小红书】App查看精彩内容！");
+        // 视频
+        parse(Platform.XIAO_HONG_SHU, "75 蝶讯DCI配色师发布了一篇小红书笔记，快来看吧！ \uD83D\uDE06 LAEjItC8CaHsyT2 \uD83D\uDE06 http://xhslink.com/UMNlHd，复制本条信息，打开【小红书】App查看精彩内容！");
     }
 
     /**

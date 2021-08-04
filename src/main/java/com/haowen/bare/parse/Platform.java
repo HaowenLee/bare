@@ -30,7 +30,9 @@ public enum Platform {
     MIAO_PAI("秒拍", "miaopai.com", MiaoPaiParser.class),
     KAI_YAN("开眼", "eyepetizer.net", KaiYanParser.class),
     MO_MO("陌陌", "immomo.com", MoMoParser.class),
-    HU_YA("虎牙", "huya.com", HuYaParser.class);
+    HU_YA("虎牙", "huya.com", HuYaParser.class),
+    HAO_KAN("好看", "haokan.hao123.com", HaoKanParser.class),
+    XIAO_HONG_SHU("小红书", "xhslink.com", XiaoHongShuParser.class);
 
     private final String name;
     private final String domain;
