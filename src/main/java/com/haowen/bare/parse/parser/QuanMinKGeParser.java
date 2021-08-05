@@ -49,9 +49,7 @@ public class QuanMinKGeParser implements BareParser {
                 .execute()
                 .body();
 
-        String jsonStr = filter(html)
-                .replace("window.__DATA__ = ", "")
-                .replace(";", "");
+        String jsonStr = filter(html);
 
         JSONObject detailObject = JSONUtil.parseObj(jsonStr)
                 .getJSONObject("detail");
@@ -77,11 +75,13 @@ public class QuanMinKGeParser implements BareParser {
      */
     public static String filter(String html) {
         // 匹配网址
-        String regex = "window.__DATA__\\s=\\s(.*?);";
+        String regex = "window.__DATA__\\s=\\s\\{(.*?)\\};";
         Pattern p = Pattern.compile(regex);
         Matcher m = p.matcher(html);
         if (m.find()) {
-            return html.substring(m.start(), m.end());
+            return html.substring(m.start(), m.end())
+                    .replace("window.__DATA__ = ", "")
+                    .replace(";", "");
         }
         return "";
     }

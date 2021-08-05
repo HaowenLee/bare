@@ -186,7 +186,7 @@ class BareApplicationTests {
      */
     @Test
     void quanMingKGeTest() throws Exception {
-        parse(Platform.QUAN_MING_K_GE, "https://kg3.qq.com/node/9BW3TTWBRj/play_v2?s=bUYQ1WbCzlQ9Kb4E&shareuid=619c9981242a3189344d&topsource=a0_pn201001006_z11_u3144176203_l1_t1627868283__&pageId=feed");
+        parse(Platform.QUAN_MING_K_GE, "https://kg3.qq.com/node/4080mMBKO5/play_v2?s=6Cipi56JTgfy76DQ&shareuid=619c9981242a3189344d&topsource=a0_pn201001006_z11_u3144176203_l1_t1628133537__&pageId=feed");
     }
 
     /**
