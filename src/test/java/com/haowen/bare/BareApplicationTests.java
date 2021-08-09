@@ -66,7 +66,10 @@ class BareApplicationTests {
      */
     @Test
     void douYinTest() throws Exception {
+        // 视频
         parse(Platform.DOU_YIN, "6.97 xsE:/ “浪漫至死不渝，我比你想象中更加深情”%你的名字   https://v.douyin.com/e3md8Sv/ 復制此鏈接，打开Dou音搜索，直接观看視频！");
+        // 图片集
+        parse(Platform.DOU_YIN, "1.00 reB:/ “八月七号马上要到了，我们可能见不了面了，也没办法请你喝入秋后的第一杯奶茶了，那就祝你平安顺遂”%情侣日常  https://v.douyin.com/eKXhkaK/ 复制佌链接，打开Dou吟搜索，値接观看視频！");
     }
 
     /**
