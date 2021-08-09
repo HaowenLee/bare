@@ -75,7 +75,7 @@ public class QuanMinKGeParser implements BareParser {
      */
     public static String filter(String html) {
         // 匹配网址
-        String regex = "window.__DATA__\\s=\\s\\{(.*?)\\};";
+        String regex = "window.__DATA__\\s=\\s\\{(.*?)};";
         Pattern p = Pattern.compile(regex);
         Matcher m = p.matcher(html);
         if (m.find()) {
