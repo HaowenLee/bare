@@ -2,7 +2,6 @@ package com.haowen.bare.parse.parser;
 
 import cn.hutool.core.util.URLUtil;
 import cn.hutool.crypto.SecureUtil;
-import cn.hutool.http.HttpUtil;
 import cn.hutool.json.JSONArray;
 import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
@@ -12,13 +11,11 @@ import com.haowen.bare.result.BareResult;
 import com.haowen.bare.utils.StringUtil;
 import com.haowen.bare.utils.UrlUtil;
 import com.haowen.bare.utils.UserAgentUtil;
-import org.apache.catalina.security.SecurityUtil;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
-import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -41,29 +38,16 @@ public class XiaoHongShuParser implements BareParser {
 
         // 构建结果
         BareResult result = new BareResult(MediaType.VIDEO);
-        List<BareResult.Image> images = new ArrayList<>();
-        result.setImages(images);
-        List<BareResult.Video> videos = new ArrayList<>();
-        result.setVideos(videos);
 
         String realUrl = UrlUtil.getRealUrl(UserAgentUtil.getOne(), url);
         String redirectPath = StringUtil.getQueryParams(realUrl).get("redirectPath").get(0);
 
         String itemId = getItemId(redirectPath);
 
-        String apiUrl = "https://www.xiaohongshu.com/fe_api/burdock/weixin/v2/note/" + itemId + "/feed?";
-        Map<String, Object> apiParam = new HashMap<>();
-        apiParam.put("openId", "oPPUS5Q3AWkM_nR5me2b4OIGeGPk");
-        apiParam.put("page", 1);
-        apiParam.put("pageSize", 1);
-        apiParam.put("noteType", 2);
-        apiParam.put("needVideo", true);
-        apiParam.put("needCount", true);
-        String apiParamBuild = URLUtil.buildQuery(apiParam, StandardCharsets.UTF_8);
-
-        String apiJsonStr = Jsoup.connect(apiUrl + apiParamBuild)
+        String singleApiUrl = "https://www.xiaohongshu.com/fe_api/burdock/weixin/v2/note/" + itemId + "/single_feed";
+        String singleJsonStr = Jsoup.connect(singleApiUrl)
                 .header("Authorization", "wxmp.926c1d27-7636-4a54-896a-993b5e934a87")
-                .header("X-Sign", "X" + SecureUtil.md5("/fe_api/burdock/weixin/v2/note/" + itemId + "/feed?" + apiParamBuild + "WSUDD"))
+                .header("X-Sign", "X" + SecureUtil.md5("/fe_api/burdock/weixin/v2/note/" + itemId + "/single_feed" + "WSUDD"))
                 .userAgent("Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/53.0.2785.143 Safari/537.36 MicroMessenger/7.0.9.501 NetType/WIFI MiniProgramEnv/Windows WindowsWechat")
                 .referrer("https://servicewechat.com/wxb296433268a1c654/46/page-frame.html")
                 .ignoreContentType(true)
@@ -71,52 +55,72 @@ public class XiaoHongShuParser implements BareParser {
                 .execute()
                 .body();
 
-        JSONObject dataObject = JSONUtil.parseObj(apiJsonStr)
-                .getJSONArray("data")
-                .getJSONObject(0);
+        JSONObject singleDataObject = JSONUtil.parseObj(singleJsonStr)
+                .getJSONObject("data");
 
-        JSONObject coverObject = dataObject.getJSONObject("cover");
+        // 标题封面
+        result.setTitle(singleDataObject.getStr("title"));
+        JSONObject coverObject = singleDataObject.getJSONObject("cover");
         result.setCover(new BareResult.Image(
-                coverObject.getStr("url"),
+                "http://ci.xiaohongshu.com/" + coverObject.getStr("traceId"),
                 coverObject.getInt("width"),
                 coverObject.getInt("height")
         ));
 
-        JSONObject videoObject = dataObject.getJSONObject("video");
-        videos.add(new BareResult.Video(
-                videoObject.getStr("url"),
-                null,
-                videoObject.getInt("width"),
-                videoObject.getInt("height")
-        ));
+        // 视频
+        if ("video".equals(singleDataObject.getStr("type"))) {
 
-        // 获取html内容
-        String html = Jsoup
-                .connect(redirectPath)
-                .header("cookie", "xhsTrackerId=b1da7fa6-9a2f-4b71-cb7a-78628d52d940; xhsuid=ZJzD8ASvuaZBr7CT; xhsTracker=url=noteDetail&xhsshare=CopyLink; timestamp2=20210804f04f5ea8e904335c3516242c; timestamp2.sig=rA2FFH3kKjaO4G2vJ56GQ4Yc_02M9jtgdX91SwxukMU; extra_exp_ids=gif_exp1,ques_clt2; noteIndex=6")
-                .userAgent(UserAgentUtil.getOne())
-                .ignoreContentType(true)
-                .execute()
-                .body();
+            result.setType(MediaType.VIDEO);
+            List<BareResult.Video> videos = new ArrayList<>();
+            result.setVideos(videos);
 
-        // 获取json数据
-        String jsonStr = regexJson(html);
-        JSONObject contentObject = JSONUtil.parseObj(jsonStr)
-                .getJSONObject("NoteView")
-                .getJSONObject("content");
+            String apiUrl = "https://www.xiaohongshu.com/fe_api/burdock/weixin/v2/note/" + itemId + "/feed?";
+            Map<String, Object> apiParam = new HashMap<>();
+            apiParam.put("openId", "oPPUS5Q3AWkM_nR5me2b4OIGeGPk");
+            apiParam.put("page", 1);
+            apiParam.put("pageSize", 2);
+            apiParam.put("noteType", 2);
+            apiParam.put("needVideo", true);
+            apiParam.put("needCount", true);
+            String apiParamBuild = URLUtil.buildQuery(apiParam, StandardCharsets.UTF_8);
 
-        // 标题
-        result.setTitle(contentObject.getStr("title"));
+            String apiJsonStr = Jsoup.connect(apiUrl + apiParamBuild)
+                    .header("Authorization", "wxmp.926c1d27-7636-4a54-896a-993b5e934a87")
+                    .header("X-Sign", "X" + SecureUtil.md5("/fe_api/burdock/weixin/v2/note/" + itemId + "/feed?" + apiParamBuild + "WSUDD"))
+                    .userAgent("Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/53.0.2785.143 Safari/537.36 MicroMessenger/7.0.9.501 NetType/WIFI MiniProgramEnv/Windows WindowsWechat")
+                    .referrer("https://servicewechat.com/wxb296433268a1c654/46/page-frame.html")
+                    .ignoreContentType(true)
+                    .method(Connection.Method.GET)
+                    .execute()
+                    .body();
 
-        JSONArray imageArray = contentObject.getJSONArray("imageList");
-        // 图片信息
-        for (int i = 0; i < imageArray.size(); i++) {
-            JSONObject item = imageArray.getJSONObject(i);
-            images.add(new BareResult.Image(
-                    "http://ci.xiaohongshu.com/" + item.getStr("traceId"),
-                    item.getInt("width"),
-                    item.getInt("height")
+            JSONObject dataObject = JSONUtil.parseObj(apiJsonStr)
+                    .getJSONArray("data")
+                    .getJSONObject(0);
+
+            JSONObject videoObject = dataObject.getJSONObject("video");
+            videos.add(new BareResult.Video(
+                    videoObject.getStr("url"),
+                    null,
+                    videoObject.getInt("width"),
+                    videoObject.getInt("height")
             ));
+        } else {
+
+            result.setType(MediaType.IMAGE);
+            List<BareResult.Image> images = new ArrayList<>();
+            result.setImages(images);
+
+            JSONArray imageArray = singleDataObject.getJSONArray("imageList");
+            // 图片信息
+            for (int i = 0; i < imageArray.size(); i++) {
+                JSONObject item = imageArray.getJSONObject(i);
+                images.add(new BareResult.Image(
+                        "http://ci.xiaohongshu.com/" + item.getStr("traceId"),
+                        item.getInt("width"),
+                        item.getInt("height")
+                ));
+            }
         }
 
         return result;
