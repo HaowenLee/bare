@@ -30,11 +30,68 @@ import java.util.regex.Pattern;
 @Component
 public class XiaoHongShuParser implements BareParser {
 
+    private static final String API = "https://edith.xiaohongshu.com/api/sns/v1/note/feed";
+
+    @Override
+    public BareResult parse(String url) throws IOException {
+        // 构建结果
+        BareResult result = new BareResult(MediaType.VIDEO);
+
+        String realUrl = UrlUtil.getRealUrl(UserAgentUtil.getOne(), url);
+        String redirectPath = StringUtil.getQueryParams(realUrl).get("redirectPath").get(0);
+
+        String itemId = "6110bd46000000002103ee4c";//getItemId(redirectPath);
+
+        Map<String, Object> paramMap = new HashMap<>();
+        paramMap.put("node_id", itemId);
+        paramMap.put("page", 1);
+        paramMap.put("has_ads_tag", false);
+        paramMap.put("num", 5);
+        paramMap.put("fetch_mode", 1);
+        paramMap.put("source", "explore");
+        paramMap.put("ads_track_id", "dssm_dssm_online_bias_7day%4028wqioik1j9uophjxbg82");
+
+        Map<String, Object> commonParamMap = new HashMap<>();
+        commonParamMap.put("fid", "1628587580107f1cca65552d8d0f91432f6126ad003e");
+        commonParamMap.put("device_fingerprint", "20200802235814f00c36fe5b8ca187a43698b8dcdea374018ceb224f35950c");
+        commonParamMap.put("device_fingerprint1", "20200802235814f00c36fe5b8ca187a43698b8dcdea374018ceb224f35950c");
+        commonParamMap.put("launch_id", "1628645280");
+        commonParamMap.put("tz", "Asia%2FShanghai");
+        commonParamMap.put("channel", "HuaweiPreloadV2");
+        commonParamMap.put("versionName", "7.3.0");
+        commonParamMap.put("deviceId", "234628e8-90a4-3162-859f-3cf3c7933cf0");
+        commonParamMap.put("platform", "android");
+        commonParamMap.put("sid", "session.1628587591234123503960");
+        commonParamMap.put("identifier_flag", "4");
+        commonParamMap.put("t", "1628645888");
+        commonParamMap.put("project_id", "ECFAAF");
+        commonParamMap.put("build", "7030185");
+        commonParamMap.put("x_trace_page_current", "explore_feed");
+        commonParamMap.put("lang", "zh-Hans");
+        commonParamMap.put("app_id", "ECFAAF01");
+        commonParamMap.put("uis", "light");
+
+        Map<String, Object> platformInfoMap = new HashMap<>();
+        platformInfoMap.put("platform", "android");
+        platformInfoMap.put("build", "7030185");
+        platformInfoMap.put("deviceId", "234628e8-90a4-3162-859f-3cf3c7933cf0");
+
+        String jsonStr = Jsoup.connect(API + "?" + URLUtil.buildQuery(paramMap, StandardCharsets.UTF_8))
+                .header("xy-common-params", URLUtil.buildQuery(commonParamMap, StandardCharsets.UTF_8))
+                .header("shield", "XYAAAAAQAAAAEAAABTAAAAUzUWEe0xG1IbD9/c+qCLOlKGmTtFa+lG43EOf+FXTKhAxoC2nL4yRJ3x/7Fbz8Mr2s9+2ac7RgxNQjOLN7z93ygz0OQ0SHPgNhO5ePc5P5VY0HSx")
+                .header("xy-platform-info", URLUtil.buildQuery(platformInfoMap, StandardCharsets.UTF_8))
+                .userAgent(UserAgentUtil.getOne())
+                .ignoreContentType(true)
+                .execute()
+                .body();
+
+        return result;
+    }
+
     /**
      * 方法描述:短视频解析
      */
-    @Override
-    public BareResult parse(String url) throws IOException {
+    public BareResult parse1(String url) throws IOException {
 
         // 构建结果
         BareResult result = new BareResult(MediaType.VIDEO);
