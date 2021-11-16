@@ -20,9 +20,3 @@
 ## 免责声明
 
 本仓库只为学习研究，如涉及侵犯个人或者团体利益，请与我取得联系，我将主动删除一切相关资料，谢谢！
-
-## 最后
-
-**如果您觉得我的开源库帮你节省了大量的开发时间，请扫描下方的二维码随意打赏，要是能打赏个 10.24** **:monkey_face:****就太****:thumbsup:****了。您的支持将鼓励我继续创作****:octocat:**
-
-<img src="https://raw.githubusercontent.com/HaowenLee/bare/master/donate/alipay.png" width="300" height="300" /> <img src="https://raw.githubusercontent.com/HaowenLee/bare/master/donate/wechat.png"  width="300" height="300" />
